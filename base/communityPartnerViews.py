@@ -1,11 +1,11 @@
 from base.models import *
+from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
-
 from base.communityPartnerSerializer import CommunityPartnerSerializer
 from base.projectSerializer import ProjectSerializer
 
@@ -17,7 +17,7 @@ class CommunityPartnerDetail(APIView):
         try:
             return CommunityPartner.objects.get(pk=pk)
         except CommunityPartner.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            raise Http404("Object doesn't exist")
 
     def post(self, request, format=None):
         serializer = CommunityPartnerSerializer(data=request.data)

@@ -1,4 +1,5 @@
 from base.models import *
+from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework import permissions
@@ -16,7 +17,7 @@ class ProjectDetail(APIView):
         try:
             return Project.objects.get(pk=pk)
         except Project.objects.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            raise Http404("Object doesn't exist")
 
     def post(self, request, format=None):
         serializer = ProjectSerializer(data=request.data)
