@@ -43,3 +43,7 @@ alias makemigrate='python3 manage.py makemigrations base'
 
 **Runs all of the migrations:**
 alias migrate='python3 manage.py migrate'
+
+# Coverage
+
+To update the coverage badge, run the tests then run `coverage-badge -o coverage.svg` and commit the new `coverage.svg` file.
