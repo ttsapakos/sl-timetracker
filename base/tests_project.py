@@ -269,3 +269,7 @@ class ProjectTests(TestCase):
         self.assertEqual(p1_json_string['end_date'], p0_json_string['end_date'])
         self.assertEqual(p1_json_string['longitude'], p0_json_string['longitude'])
         self.assertEqual(p1_json_string['latitude'], p0_json_string['latitude'])
+
+    def test_bad_get(self):
+        project0 = self.client.get('/project/99999/')
+        self.assertEqual(project0.status_code, 404)

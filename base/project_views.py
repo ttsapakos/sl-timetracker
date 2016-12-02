@@ -6,7 +6,6 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
-
 from base.project_serializer import ProjectSerializer
 from base.user_serializer import UserSerializer
 
@@ -17,7 +16,7 @@ class ProjectDetail(APIView):
     def get_object(self, pk):
         try:
             return Project.objects.get(pk=pk)
-        except Project.objects.DoesNotExist:
+        except Project.DoesNotExist:
             raise Http404("Object doesn't exist")
 
     def post(self, request, format=None):
@@ -53,4 +52,3 @@ class ProjectStudents(APIView):
         users = User.objects.filter(id__in=Enrollment.objects.filter(project=pk).values_list("user", flat=True))
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
-        
