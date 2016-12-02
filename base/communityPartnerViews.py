@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework import viewsets
 from base.communityPartnerSerializer import CommunityPartnerSerializer
 from base.projectSerializer import ProjectSerializer
+from datetime import datetime
 
 class CommunityPartnerDetail(APIView):
     """
@@ -44,12 +45,18 @@ class CommunityPartnerDetail(APIView):
         communityPartner.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-'''
 class CommunityPartnerProjects(APIView):
     """
     Retrieve all projects for a community partner
     """
     def get(self, request, pk, format=None):
-        serializer = ProjectSerializer(Project.objects.filter(community_partner=pk))
+        serializer = ProjectSerializer(Project.objects.filter(community_partner=pk), many=True)
         return Response(serializer.data)
-'''
+
+class CommunityPartnerProjectsActive(APIView):
+    """
+    Retrieve all active projects for a community partner
+    """
+    def get(self, request, pk, format=None):
+        serializer = ProjectSerializer(Project.objects.filter(community_partner=pk, end_date__gt=datetime.today(), start_date__lt=datetime.today()), many=True)
+        return Response(serializer.data)
