@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_auth.serializers import UserDetailsSerializer
 from django.http import Http404
 from base.course_serializer import CourseSerializer
-from base.projectSerializer import ProjectSerializer
+from base.project_serializer import ProjectSerializer
 from base.user_serializer import UserSerializer
 
 class CourseDetail(APIView):

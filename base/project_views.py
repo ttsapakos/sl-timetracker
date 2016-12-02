@@ -7,7 +7,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
 
-from base.projectSerializer import ProjectSerializer
+from base.project_serializer import ProjectSerializer
+from base.user_serializer import UserSerializer
 
 class ProjectDetail(APIView):
     """
@@ -43,3 +44,13 @@ class ProjectDetail(APIView):
         project = self.get_object(pk)
         project.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class ProjectStudents(APIView):
+    """
+    Get all students in a project
+    """
+    def get(self, request, pk, format=None):
+        users = User.objects.filter(id__in=Enrollment.objects.filter(project=pk).values_list("user", flat=True))
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+        

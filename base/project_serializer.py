@@ -1,7 +1,7 @@
 from base.models import Project
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from base.communityPartnerSerializer import CommunityPartnerSerializer
+from base.community_partner_serializer import CommunityPartnerSerializer
 
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:

@@ -6,8 +6,8 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
-from base.communityPartnerSerializer import CommunityPartnerSerializer
-from base.projectSerializer import ProjectSerializer
+from base.community_partner_serializer import CommunityPartnerSerializer
+from base.project_serializer import ProjectSerializer
 from datetime import datetime
 
 class CommunityPartnerDetail(APIView):
