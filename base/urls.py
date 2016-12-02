@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'communityPartner/$', communityPartnerViews.CommunityPartnerDetail.as_view()),
     url(r'communityPartner/(?P<pk>[0-9]+)/$', communityPartnerViews.CommunityPartnerDetail.as_view()),
     url(r'communityPartner/(?P<pk>[0-9]+)/projects/$', communityPartnerViews.CommunityPartnerProjects.as_view()),
-    url(r'communityPartner/(?P<pk>[0-9]+)/projectsactive/$', communityPartnerViews.CommunityPartnerProjectsActive.as_view()),
+    url(r'communityPartner/(?P<pk>[0-9]+)/projects/active/$', communityPartnerViews.CommunityPartnerProjectsActive.as_view()),
     url(r'project/$', projectViews.ProjectDetail.as_view()),
     url(r'project/(?P<pk>[0-9]+)/$', projectViews.ProjectDetail.as_view())
 ]

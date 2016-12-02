@@ -58,5 +58,5 @@ class CommunityPartnerProjectsActive(APIView):
     Retrieve all active projects for a community partner
     """
     def get(self, request, pk, format=None):
-        serializer = ProjectSerializer(Project.objects.filter(community_partner=pk, end_date__gt=datetime.today(), start_date__lt=datetime.today()), many=True)
+        serializer = ProjectSerializer(Project.objects.filter(community_partner=pk, end_date__gt=datetime.today(), start_date__lte=datetime.today()), many=True)
         return Response(serializer.data)
