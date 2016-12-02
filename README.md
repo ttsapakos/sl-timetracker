@@ -1,3 +1,5 @@
+![alt tag](https://raw.githubusercontent.com/ttsapakos/sl-timetracker/master/coverage.svg)
+
 # Set Up
 
 ### Initial Dependencies
