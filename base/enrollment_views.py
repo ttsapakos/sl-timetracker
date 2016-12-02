@@ -4,46 +4,34 @@ from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework import status
-
+from django.http import Http404
 from base.enrollment_serializer import EnrollmentSerializer
 
 
 class EnrollmentList(APIView):
-    """
-    List all users, or create a new user.
-    """
     def get(self, request, format=None):
         enrollments = Enrollment.objects.all()
         serializer = EnrollmentSerializer(enrollments, many=True)
         return Response(serializer.data)
 
 class EnrollmentCourseList(APIView):
-    """
-    List all users, or create a new user.
-    """
     def get(self, request, course, format=None):
         enrollments = Enrollment.objects.filter(course=course, is_active=True)
         serializer = EnrollmentSerializer(enrollments, many=True)
         return Response(serializer.data)
 
 class EnrollmentCRNList(APIView):
-    """
-    List all users, or create a new user.
-    """
     def get(self, request, crn, format=None):
         enrollments = Enrollment.objects.filter(crn=crn, is_active=True)
         serializer = EnrollmentSerializer(enrollments, many=True)
         return Response(serializer.data)
 
 class EnrollmentDetail(APIView):
-    """
-    Retrieve, update or delete a user instance.
-    """
     def get_object(self, pk):
         try:
             return Enrollment.objects.get(pk=pk)
         except Enrollment.DoesNotExist:
-            return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+            raise Http404("Object doesn't exist")
 
     def get(self, request, pk, format=None):
         enrollment = self.get_object(pk)

@@ -4,6 +4,7 @@ from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework import status
+from django.http import Http404
 
 from base.user_serializer import UserSerializer
 
@@ -24,7 +25,7 @@ class UserDetail(APIView):
         try:
             return User.objects.get(pk=pk)
         except User.DoesNotExist:
-            return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+            raise Http404("Object doesn't exist")
 
     def get(self, request, pk, format=None):
         user = self.get_object(pk)

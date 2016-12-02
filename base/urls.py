@@ -17,6 +17,8 @@ urlpatterns = [
     url(r'^courses/$', course_views.CourseList.as_view()),
     url(r'^course/$', course_views.CourseDetail.as_view()),
     url(r'^course/(?P<pk>[A-Z0-9]+)/$', course_views.CourseDetail.as_view()),
+    url(r'^course/(?P<course>[A-Z0-9]+)/projects/$', course_views.CourseProjectList.as_view()),
+    url(r'^course/(?P<course>[A-Z0-9]+)/instructors/$', course_views.CourseInstructorList.as_view()),
     #url(r'^course/(?P<pk>[A-Z0-9]+)/projects/$', course_views.CourseProjectList.as_view()),
     url(r'^department/$', department_views.DepartmentDetail.as_view()),
     url(r'^departments/$', department_views.DepartmentList.as_view()),

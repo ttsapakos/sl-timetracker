@@ -4,7 +4,7 @@ from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework import status
-
+from django.http import Http404
 from base.college_serializer import CollegeSerializer
 
 class CollegeDetail(APIView):
@@ -12,7 +12,7 @@ class CollegeDetail(APIView):
         try:
             return College.objects.get(pk=pk)
         except College.DoesNotExist:
-            return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+            raise Http404("Object doesn't exist")
 
     def get(self, request, pk, format=None):
         college = self.get_object(pk)
