@@ -7,6 +7,7 @@ from . import course_views
 from . import department_views
 from . import college_views
 from . import user_views
+from . import semester_views
 
 
 urlpatterns = [
@@ -34,6 +35,16 @@ urlpatterns = [
     url(r'^enroll/(?P<pk>[0-9]+)/$', enrollment_views.EnrollmentDetail.as_view()),
     url(r'^enroll/$', enrollment_views.EnrollmentDetail.as_view()),
     #url(r'users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
+<<<<<<< HEAD
+    url(r'communityPartner/$', communityPartnerViews.CommunityPartnerDetail.as_view()),
+    url(r'communityPartner/(?P<pk>[0-9]+)/$', communityPartnerViews.CommunityPartnerDetail.as_view()),
+    #url(r'communityPartner/(?P<pk>[0-9]+)/projects/$', communityPartnerViews.CommunityPartnerProjects.as_view()),
+    url(r'project/$', projectViews.ProjectDetail.as_view()),
+    url(r'project/(?P<pk>[0-9]+)/$', projectViews.ProjectDetail.as_view()),
+    url(r'semester/$', semester_views.SemesterDetail.as_view()),
+    url(r'semester/startnext/$', semester_views.StartSemester.as_view()),
+    url(r'semester/(?P<pk>[\w{}.-]{1,40})/$', semester_views.SemesterDetail.as_view())
+=======
     url(r'communityPartner/$', community_partner_views.CommunityPartnerDetail.as_view()),
     url(r'communityPartner/(?P<pk>[0-9]+)/$', community_partner_views.CommunityPartnerDetail.as_view()),
     url(r'communityPartner/(?P<pk>[0-9]+)/projects/$', community_partner_views.CommunityPartnerProjects.as_view()),
@@ -41,6 +52,7 @@ urlpatterns = [
     url(r'project/$', project_views.ProjectDetail.as_view()),
     url(r'project/(?P<pk>[0-9]+)/$', project_views.ProjectDetail.as_view()),
     url(r'project/(?P<pk>[0-9]+)/students/$', project_views.ProjectStudents.as_view())
+>>>>>>> master
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
