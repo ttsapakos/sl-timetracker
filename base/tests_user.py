@@ -46,12 +46,14 @@ class CommunityPartnerTests(TestCase):
     def test_get_put_user(self):
         self.assertEqual(self.user1.userprofile.role, UserProfile.INSTRUCTOR)
         self.assertEqual(self.user1.first_name, "Fa")
-        user_put = self.client.put('/users/%s/' % self.user1.pk,
-        {
+
+        # Updated user information
+        new_info = {
             "first_name": "Hello",
             "username": "kename.f@neu.edu",
             "role": UserProfile.STUDENT,
-        },)
+        }
+        user_put = self.client.put('/users/%s/' % self.user1.pk, json.dumps(new_info), content_type="application/json")
         u_json_string = json.loads(user_put.content.decode('utf-8'))
         print(u_json_string)
         self.assertEqual(user_put.status_code, 200)
