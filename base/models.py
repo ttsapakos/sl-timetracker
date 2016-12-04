@@ -8,6 +8,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
@@ -93,6 +94,10 @@ class Record(models.Model):
     def clean(self):
         if (self.longitude and not self.latitude) or (not self.longitude and self.latitude):
             raise ValidationError(_(u"Need to provide both longitude and latitude or neither!"))
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super(Record, self).save(*args, **kwargs)
 
 
 class RecordCategory(models.Model):
