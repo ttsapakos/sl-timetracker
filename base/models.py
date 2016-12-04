@@ -95,10 +95,13 @@ class Record(models.Model):
         if (self.longitude and not self.latitude) or (not self.longitude and self.latitude):
             raise ValidationError(_(u"Need to provide both longitude and latitude or neither!"))
 
+<<<<<<< HEAD
     def save(self, *args, **kwargs):
         self.full_clean()
         return super(Record, self).save(*args, **kwargs)
 
+=======
+>>>>>>> master
 
 class RecordCategory(models.Model):
     TRAININGS_AND_ORIENTATIONS = 'TO'
