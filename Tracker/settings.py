@@ -56,6 +56,7 @@ REST_FRAMEWORK = {
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'allauth',
     'allauth.account',
     'base.apps.BaseConfig',
@@ -71,7 +72,6 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders',
 ]
 
 
