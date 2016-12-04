@@ -45,19 +45,7 @@ class SemesterTests(TestCase):
 			"is_active": 'false'
 		})
 		self.assertEqual(semester.status_code, 400)
-		
-		# Semester with non-string name
-		semester = self.client.post('/semester/',
-		{
-			"name": None,
-			"start_date": "2016-09-01",
-			"end_date": "2016-12-31",
-			"is_active": 'true'
-		})
-		self.assertEqual(semester.status_code, 400)
-		
-	
-	
+			
 	def test_basic_put_semester(self):
 	
 		# Set up semester
