@@ -72,6 +72,16 @@ class UserTests(TestCase):
         self.assertEqual(User.objects.get(pk=self.user1.pk).userprofile.role, UserProfile.INSTRUCTOR)
         self.assertEqual(User.objects.get(pk=self.user1.pk).first_name, "Hello")
 
+    def test_bad_put_user(self):
+        # Updated user information
+        new_info = {
+            "first_name": "Hello",
+            "username": "",
+            "role": UserProfile.STUDENT,
+        }
+        user_put = self.client.put('/users/%s/' % self.user1.pk, json.dumps(new_info), content_type="application/json")
+        self.assertEqual(user_put.status_code, 400)
+
     def test_delete_user(self):
         self.user3 = User(username="ryan@neu.edu", first_name="Ryan", password="password1")
         self.user3.save()

@@ -188,3 +188,40 @@ class UserAuthTests(TestCase):
         })
         l1_json_string = json.loads(logout0.content.decode('utf-8'))
         self.assertEqual(logout0.status_code, 200)
+
+    def test_user_me(self):
+        user1 = self.client.post('/user/registration/',
+        {
+            "first_name": "Test",
+            "last_name": "User",
+            "username": "Test@husky.neu.edu",
+            "password1": "123456abc",
+            "password2": "123456abc",
+        })
+        u1_json_string = json.loads(user1.content.decode('utf-8'))
+        self.assertEqual(user1.status_code, 201)
+        self.assertTrue('key' in u1_json_string)
+        key = u1_json_string['key']
+
+        user = User.objects.get(username='Test@husky.neu.edu')
+        self.assertEqual(user.userprofile.role, UserProfile.STUDENT)
+        self.assertEqual(user.first_name, 'Test')
+        self.assertEqual(user.last_name, 'User')
+        self.assertEqual(user.username, 'Test@husky.neu.edu')
+
+        auth_headers = {
+            'AUTHORIZATION': 'Token ' + u1_json_string['key'],
+        }
+        me = self.client.get('/me/', **auth_headers)
+        m_json_string = json.loads(me.content.decode('utf-8'))
+        self.assertEqual(me.status_code, 200)
+        self.assertEqual(m_json_string['first_name'], "Test")
+        self.assertEqual(m_json_string['last_name'], "User")
+        self.assertEqual(m_json_string['username'], "Test@husky.neu.edu")
+        self.assertEqual(m_json_string['role'], UserProfile.STUDENT)
+        self.assertEqual(m_json_string['id'], user.id)
+
+    def test_user_me_bad(self):
+        me = self.client.get('/me/')
+        m_json_string = json.loads(me.content.decode('utf-8'))
+        self.assertEqual(me.status_code, 404)
