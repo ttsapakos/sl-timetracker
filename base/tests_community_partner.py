@@ -38,6 +38,20 @@ class CommunityPartnerTests(TestCase):
         self.assertEqual(cp0Updated_json_string['id'], cp0_json_string['id'])
         self.assertEqual(cp0Updated_json_string['name'], "Updated Community Partner Name")
 
+    def test_bad_update(self):
+        communityPartner0 = self.client.post('/communityPartner/',
+        {
+            "name": "Example Community Partner 0"
+        })
+        cp0_json_string = json.loads(communityPartner0.content.decode('utf-8'))
+
+        temp_dict = {
+            "id": cp0_json_string['id'],
+        }
+
+        communityPartner0Updated = self.client.put('/communityPartner/' + str(cp0_json_string['id']) + '/', json.dumps(temp_dict), content_type="application/json")
+        self.assertEqual(communityPartner0Updated.status_code, 400)
+
     def test_get(self):
         communityPartner0 = self.client.post('/communityPartner/',
         {
@@ -52,6 +66,17 @@ class CommunityPartnerTests(TestCase):
     def test_bad_get(self):
         communityPartner0 = self.client.get('/communityPartner/99999/')
         self.assertEqual(communityPartner0.status_code, 404)
+
+    def test_delete(self):
+        communityPartner0 = self.client.post('/communityPartner/',
+        {
+            "name": "Example Community Partner 0"
+        })
+        cp0_json_string = json.loads(communityPartner0.content.decode('utf-8'))
+        self.assertEqual(communityPartner0.status_code, 201)
+
+        communityPartnerDeleted = communityPartner0 = self.client.delete('/communityPartner/' + str(cp0_json_string['id']) +'/')
+        self.assertEqual(communityPartnerDeleted.status_code, 204);
 
 class CommunityPartnerProjectsTests(TestCase):
 
