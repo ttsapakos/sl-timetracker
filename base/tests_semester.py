@@ -49,7 +49,7 @@ class SemesterTests(TestCase):
 		# Semester with non-string name
 		semester = self.client.post('/semester/',
 		{
-			"name": 45,
+			"name": None,
 			"start_date": "2016-09-01",
 			"end_date": "2016-12-31",
 			"is_active": 'true'
@@ -104,9 +104,9 @@ class SemesterTests(TestCase):
 			"name":	 "FALL2016",
 			"start_date": "2016-09-01",
 			"end_date": "2016-12-31",
-			"is_active": "sometimes"
+			"is_active": None,
 		}), content_type="application/json")
-		self.assertEqual(semester.status_code, 422)
+		self.assertEqual(semester.status_code, 400)
 		
 		# Modify the semester with bad start_date
 		semester = self.client.put('/semester/{semester_id}/'.format(semester_id = s0_json['name']),json.dumps(
@@ -116,7 +116,7 @@ class SemesterTests(TestCase):
 			"end_date": "2016-12-31",
 			"is_active": 'false'
 		}), content_type="application/json")
-		self.assertEqual(semester.status_code, 422)
+		self.assertEqual(semester.status_code, 400)
 		
 		# Modify the semester with bad end_date
 		semester = self.client.put('/semester/{semester_id}/'.format(semester_id = s0_json['name']),json.dumps(
