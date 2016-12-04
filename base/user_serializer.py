@@ -12,7 +12,8 @@ class UserSerializer(UserDetailsSerializer):
         fields = UserDetailsSerializer.Meta.fields + ('role',)
 
     def update(self, instance, validated_data):
-        role = validated_data.pop('role', {})
+        profile_data = validated_data.pop('userprofile', {})
+        role = profile_data.get('role')
 
         instance = super(UserSerializer, self).update(instance, validated_data)
 

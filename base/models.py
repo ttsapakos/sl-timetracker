@@ -138,11 +138,11 @@ def create_user_profile(sender, instance, created, **kwargs):
     Create a user profile with a role of `instructor` if the email address is
     neu.edu or northeastern.edu. Otherwise set the role to `student`.
     """
-    role = UserProfile.STUDENT
-    domain = instance.username.split('@')[-1]
-    if domain in ("northeastern.edu", "neu.edu"):
-        role = UserProfile.INSTRUCTOR
     if created:
+        role = UserProfile.STUDENT
+        domain = instance.username.split('@')[-1]
+        if domain in ("northeastern.edu", "neu.edu"):
+            role = UserProfile.INSTRUCTOR
         UserProfile.objects.create(user=instance, role=role)
 
 # Every time a user is created, the above method runs.

@@ -43,7 +43,7 @@ class CommunityPartnerTests(TestCase):
         self.assertEqual(user_detail.status_code, 404)
         self.assertEqual(u_json_string['detail'], "Not found.")
 
-    def test_get_put_user(self):
+    def test_full_put_user(self):
         self.assertEqual(self.user1.userprofile.role, UserProfile.INSTRUCTOR)
         self.assertEqual(self.user1.first_name, "Fa")
 
@@ -54,8 +54,34 @@ class CommunityPartnerTests(TestCase):
             "role": UserProfile.STUDENT,
         }
         user_put = self.client.put('/users/%s/' % self.user1.pk, json.dumps(new_info), content_type="application/json")
-        u_json_string = json.loads(user_put.content.decode('utf-8'))
-        print(u_json_string)
         self.assertEqual(user_put.status_code, 200)
-        self.assertEqual(self.user1.userprofile.role, UserProfile.STUDENT)
-        self.assertEqual(self.user1.first_name, "Hello")
+        self.assertEqual(User.objects.get(pk=self.user1.pk).userprofile.role, UserProfile.STUDENT)
+        self.assertEqual(User.objects.get(pk=self.user1.pk).first_name, "Hello")
+
+    def test_partial_put_user(self):
+        self.assertEqual(self.user1.userprofile.role, UserProfile.INSTRUCTOR)
+        self.assertEqual(self.user1.first_name, "Fa")
+
+        # Updated user information
+        new_info = {
+            "first_name": "Hello",
+            "username": "kename.f@neu.edu",
+        }
+        user_put = self.client.put('/users/%s/' % self.user1.pk, json.dumps(new_info), content_type="application/json")
+        self.assertEqual(user_put.status_code, 200)
+        self.assertEqual(User.objects.get(pk=self.user1.pk).userprofile.role, UserProfile.INSTRUCTOR)
+        self.assertEqual(User.objects.get(pk=self.user1.pk).first_name, "Hello")
+
+    def test_delete_user(self):
+        self.user3 = User(username="ryan@neu.edu", first_name="Ryan", password="password1")
+        self.user3.save()
+        user_detail = self.client.get('/users/%s/' % self.user3.pk)
+        u_json_string = json.loads(user_detail.content.decode('utf-8'))
+        self.assertEqual(user_detail.status_code, 200)
+
+        user_delete = self.client.delete('/users/%s/' % self.user3.pk)
+        self.assertEqual(user_delete.status_code, 204)
+
+        user_detail = self.client.get('/users/%s/' % self.user3.pk)
+        u_json_string = json.loads(user_detail.content.decode('utf-8'))
+        self.assertEqual(user_detail.status_code, 404)
