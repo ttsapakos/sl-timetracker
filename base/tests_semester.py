@@ -119,7 +119,7 @@ class SemesterTests(TestCase):
 		self.assertEqual(semester.status_code, 422)
 		
 		# Modify the semester with bad end_date
-		semester = self.client.put('/semester/{semester_id}/'.format(semester_id = s0_json['namejson.dumps(
+		semester = self.client.put('/semester/{semester_id}/'.format(semester_id = s0_json['name']),json.dumps(
 		{
 			"name":	 "FALL2016",
 			"start_date": "2016-09-01",
