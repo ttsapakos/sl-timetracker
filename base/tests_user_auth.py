@@ -3,7 +3,7 @@ from django.test import Client
 from base.models import User, UserProfile
 import json
 
-class CommunityPartnerTests(TestCase):
+class UserAuthTests(TestCase):
 
     def setUp(self):
         self.client = Client()
