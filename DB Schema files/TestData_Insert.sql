@@ -90,10 +90,10 @@ insert into Community_Partner (name)
 	
 -- Project --
 insert into Project (name, course_id, community_partner_id, start_date, end_date, description, longitude, latitude)
-	values ('TimeTracker', 'CS4500', 1001, '2016-09-01', '2016-12-20', 'Time Tracker device for Service Learning', 42.3398, 71.0892);
+	values ('TimeTracker', 'CS4500', "DS", '2016-09-01', '2016-12-20', 'Time Tracker device for Service Learning', 42.3398, 71.0892);
 	
 insert into Project (name, course_id, community_partner_id, start_date, end_date, description, longitude, latitude)
-	values ('America Scores', 'CS4500', 1002, '2016-01-01', '2017-01-01', null, null, null);
+	values ('America Scores', 'CS4500', "DS", '2016-01-01', '2017-01-01', null, null, null);
 	
 -- Record_Category --
 insert into Record_Category (name)

@@ -17,6 +17,17 @@ class UserList(APIView):
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
 
+class MyUser(APIView):
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404("Object doesn't exist")
+    def get(self, request, format=None):
+        user = self.get_object(request.user.id)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
 class UserDetail(APIView):
     """
     Retrieve, update or delete a user instance.
@@ -34,10 +45,10 @@ class UserDetail(APIView):
 
     def put(self, request, pk, format=None):
         user = self.get_object(pk)
-        serializer = UserSerializer(user, data=request.data)
+        serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):

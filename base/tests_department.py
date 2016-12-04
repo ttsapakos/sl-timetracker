@@ -121,6 +121,28 @@ class DepartmentTests(TestCase):
         department1 = self.client.put('/department/Deep%20Department/', json.dumps({}))
         self.assertEqual(department1.status_code, 404)
 
+    def test_bad_put_serializer_fail(self):
+        college = College(name='Enterprise')
+        college.save()
+        department0 = self.client.post('/department/',
+        {
+            "name": "Department",
+            "college": college.name
+        })
+        d0_json_string = json.loads(department0.content.decode('utf-8'))
+        self.assertEqual(department0.status_code, 201)
+
+        college1 = College(name='Australia')
+        college1.save()
+
+        temp_dict = {
+            "llama": "Department",
+            "college": college1.name
+        }
+
+        department1 = self.client.put('/department/' + str(d0_json_string['name']) + '/', json.dumps(temp_dict), content_type="application/json")
+        self.assertEqual(department1.status_code, 400)
+
     def test_good_delete(self):
         college = College(name='Ephemerality')
         college.save()
@@ -136,7 +158,7 @@ class DepartmentTests(TestCase):
 
         department1 = self.client.delete('/department/' + str(d0_json_string['name']) + '/')
         self.assertEqual(department1.status_code, 204)
-        
+
     def test_get_all(self):
         college0 = College(name='First')
         college0.save()
@@ -146,7 +168,7 @@ class DepartmentTests(TestCase):
             "college": college0.name
         })
         self.assertEqual(department0.status_code, 201)
-        
+
         college1 = College(name='Second')
         college1.save()
         department1 = self.client.post('/department/',

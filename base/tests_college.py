@@ -3,7 +3,7 @@ from django.test import Client
 from base.models import College
 import json
 
-class ProjectTests(TestCase):
+class CollegeTests(TestCase):
 
     def setUp(self):
         self.client = Client()

@@ -54,12 +54,6 @@ class CourseStudentList(APIView):
         serializer = UserSerializer(students, many=True)
         return Response(serializer.data)
 
-class CourseProjectList(APIView):
-    def get(self, request, course, format=None):
-        projects = Project.objects.filter(course=course)
-        serializer = ProjectSerializer(projects, many=True)
-        return Response(serializer.data)
-
 class CourseSectionsList(APIView):
     def get(self, request, course, format=None):
         enrollments = Enrollment.objects.filter(id__in=Enrollment.objects.filter(course=course, user__userprofile__role=UserProfile.INSTRUCTOR).values('crn').distinct().values('id'))

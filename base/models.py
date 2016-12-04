@@ -8,8 +8,11 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 
 
 class College(models.Model):
@@ -77,16 +80,25 @@ class Record(models.Model):
     project = models.ForeignKey(Project, models.DO_NOTHING)
     date = models.DateField()
     start_time = models.TimeField(blank=True, null=True)
-    total_hours = models.DecimalField(max_digits=4, decimal_places=2)
+    total_hours = models.DecimalField(max_digits=4, decimal_places=2, validators=[MinValueValidator(0.1),
+                                                                                  MaxValueValidator(24)])
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     category = models.ForeignKey('RecordCategory', models.DO_NOTHING)
     is_active = models.BooleanField(default=True)
-    comments = models.TextField(blank=True, null=True)
-    extra_field = models.CharField(max_length=45, blank=True, null=True)
+    comments = models.TextField(blank=True, null=True, validators=[MinLengthValidator(1)])
+    extra_field = models.TextField(blank=True, null=True)
 
     class Meta:
         db_table = 'Record'
+
+    def clean(self):
+        if (self.longitude and not self.latitude) or (not self.longitude and self.latitude):
+            raise ValidationError(_(u"Need to provide both longitude and latitude or neither!"))
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super(Record, self).save(*args, **kwargs)
 
 
 class RecordCategory(models.Model):
@@ -138,11 +150,11 @@ def create_user_profile(sender, instance, created, **kwargs):
     Create a user profile with a role of `instructor` if the email address is
     neu.edu or northeastern.edu. Otherwise set the role to `student`.
     """
-    role = UserProfile.STUDENT
-    domain = instance.username.split('@')[-1]
-    if domain in ("northeastern.edu", "neu.edu"):
-        role = UserProfile.INSTRUCTOR
     if created:
+        role = UserProfile.STUDENT
+        domain = instance.username.split('@')[-1]
+        if domain in ("northeastern.edu", "neu.edu"):
+            role = UserProfile.INSTRUCTOR
         UserProfile.objects.create(user=instance, role=role)
 
 # Every time a user is created, the above method runs.
