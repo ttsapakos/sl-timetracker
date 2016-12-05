@@ -305,6 +305,30 @@ class ProjectTests(TestCase):
         project0Deleted = self.client.delete('/project/' + str(p0_json_string['id']) + '/')
         self.assertEqual(project0Deleted.status_code, 204)
 
+class ProjectsAllTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.college = College("hello")
+        self.college.save()
+        self.department = Department("test", self.college.name)
+        self.department.save()
+        self.course = Course("CS4500", "Software Dev", self.department.name)
+        self.course.save()
+        self.communityPartner = CommunityPartner(name="Example Community Partner")
+        self.communityPartner.save()
+        self.project1 = Project(name="p1", course=self.course, community_partner=self.communityPartner, description="desc", start_date="2016-12-12", end_date="2016-12-13", longitude="1.0", latitude="1.0")
+        self.project1.save()
+        self.project2 = Project(name="p2", course=self.course, community_partner=self.communityPartner, description="desc", start_date="2016-12-12", end_date="2016-12-13", longitude="1.0", latitude="1.0")
+        self.project2.save()
+        self.project3 = Project(name="p3", course=self.course, community_partner=self.communityPartner, description="desc", start_date="2016-12-12", end_date="2016-12-13", longitude="1.0", latitude="1.0")
+        self.project3.save()
+
+    def test_get_all(self):
+        projects = self.client.get('/projects/')
+        projects_json_string = json.loads(projects.content.decode('utf-8'))
+        self.assertEqual(projects.status_code, 200)
+        self.assertEqual(len(projects_json_string), 3)
+
 class ProjectStudentsTests(TestCase):
     def setUp(self):
         self.client = Client()
