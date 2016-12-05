@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from base.models import Enrollment, User
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from rest_auth.serializers import UserDetailsSerializer
@@ -6,10 +6,13 @@ from rest_auth.registration.serializers import RegisterSerializer
 
 class UserSerializer(UserDetailsSerializer):
     role = serializers.CharField(source="userprofile.role")
+    courses = serializers.SerializerMethodField('get_all_courses')
+    projects = serializers.SerializerMethodField('get_all_projects')
+    sections = serializers.SerializerMethodField('get_all_sections')
 
     class Meta:
         model = User
-        fields = UserDetailsSerializer.Meta.fields + ('role', 'id')
+        fields = UserDetailsSerializer.Meta.fields + ('role', 'id', 'courses', 'projects', 'sections')
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('userprofile', {})
@@ -23,6 +26,15 @@ class UserSerializer(UserDetailsSerializer):
             profile.role = role
             profile.save()
         return instance
+
+    def get_all_courses(self, obj):
+        return set(Enrollment.objects.filter(user=obj).values_list("course", flat=True))
+
+    def get_all_projects(self, obj):
+        return set(Enrollment.objects.filter(user=obj).values_list("project", flat=True))
+
+    def get_all_sections(self, obj):
+        return set(Enrollment.objects.filter(user=obj).values_list("crn", flat=True))
 
 class UserRegisterSerializer(RegisterSerializer):
     VALID_DOMAINS = (
