@@ -44,6 +44,15 @@ class ProjectDetail(APIView):
         project.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class ProjectsAll(APIView):
+    """
+    Get all projects
+    """
+    def get(self, request, format=None):
+        projects = Project.objects.all()
+        serializer = ProjectSerializer(projects, many=True)
+        return Response(serializer.data)
+
 class ProjectStudents(APIView):
     """
     Get all students in a project

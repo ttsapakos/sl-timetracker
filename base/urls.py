@@ -41,6 +41,7 @@ urlpatterns = [
     url(r'communityPartner/(?P<pk>[0-9]+)/projects/$', community_partner_views.CommunityPartnerProjects.as_view()),
     url(r'communityPartner/(?P<pk>[0-9]+)/projects/active/$',
         community_partner_views.CommunityPartnerProjectsActive.as_view()),
+    url(r'projects/$', project_views.ProjectsAll.as_view()),
     url(r'project/$', project_views.ProjectDetail.as_view()),
     url(r'project/(?P<pk>[0-9]+)/$', project_views.ProjectDetail.as_view()),
     url(r'project/(?P<pk>[0-9]+)/students/$', project_views.ProjectStudents.as_view()),
